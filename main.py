@@ -8,16 +8,18 @@ from pydantic import BaseModel
 
 from mylib.bot import scrape
 
+
 app = FastAPI()
 
 
 class Wiki(BaseModel):
     name: str
+    sentences: int
 
 
 @app.post("/wiki")
 async def scrape_story(wiki: Wiki):
-    result = scrape(name=wiki.name)
+    result = scrape(name=wiki.name, sentences=wiki.sentences)
     payload = {"wikipage": result}
     json_compatible_item_data = jsonable_encoder(payload)
     return JSONResponse(content=json_compatible_item_data)
@@ -34,6 +36,10 @@ async def add(num1: int, num2: int):
 
     total = num1 + num2
     return {"total": total}
+
+
+# x = "wikipage :" + 'Microsoft Corporation is an American multinational technology corporation headquartered in Redmond, Washington.'
+# x = 'Microsoft  Corporation  '
 
 
 if __name__ == "__main__":
