@@ -17,10 +17,10 @@ async def hello():
     return {"Hello": "World"}
 
 
-@app.post("/package")
-async def make_package(package: Package):  # endpoint
+@app.post("/package/{priority}")
+async def make_package(priority: int, value: bool, package: Package):  # endpoint
     print(f"package type={type(package)}")
     print(f"package={package}")
     package.name = package.name + ":" + package.number
     print(f"package={package}")
-    return f"Post response at endpoint /package: {package}"
+    return {"priority": priority, "value": value, **package.dict()}
